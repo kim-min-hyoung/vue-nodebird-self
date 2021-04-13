@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="!me">
-    <v-card class="mt-e ml-2 pa-4">
+    <v-card class="mt-2 pa-4">
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-text-field
           v-model="email"
@@ -16,14 +16,14 @@
           type="password"
           required
         />
-        <v-btn type="submit" :disabled="!valid">로그인</v-btn>
+        <v-btn type="submit" color="cyan" :disabled="!valid">로그인</v-btn>
         <v-btn nuxt to="/signup">회원가입</v-btn>
       </v-form>
     </v-card>
   </v-container>
   <v-container v-else>
     <v-card class="mt-3 ml-2 pa-8">
-      김민형 님이 로그인 되었습니다.
+      {{ me.nickname }}님이 로그인 되었습니다.
       <v-btn @click="onLogOut">로그아웃</v-btn>
     </v-card>
   </v-container>
@@ -55,7 +55,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.dispatch("users/logIn", {
           email: this.email,
-          nickname: "김민형",
+          nickname: "제목없음",
         });
       } else {
         alert("폼이 유효하지 않습니다");

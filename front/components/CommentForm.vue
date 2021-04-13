@@ -1,0 +1,81 @@
+<template>
+  <v-form
+    class="mx-5"
+    ref="form"
+    v-model="valid"
+    style="position: relative"
+    @submit.prevent="onSubmitForm"
+  >
+    <v-textarea
+      v-model="content"
+      filled
+      auto-grow
+      label="댓글 달기"
+      :hide-detaile="hideDetails"
+      :success="success"
+      :success-message="successMessage"
+      @input="onChangeTextarea"
+    />
+    <v-btn type="submit" absolute top right dark color="cyan">삐약</v-btn>
+  </v-form>
+</template>
+
+<script>
+export default {
+  props: {
+    postId: {
+      type: Number,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      valid: false,
+      content: "",
+      hideDetails: false,
+      success: false,
+      successMessage: "",
+    };
+  },
+
+  computed: {
+    me() {
+      return this.$store.state.users.me;
+    },
+  },
+
+  methods: {
+    onChangeTextarea(value) {
+      if (value.length) {
+        this.hideDetails = true;
+        this.success = false;
+        this.successMessage = "";
+      }
+    },
+    onSubmitForm() {
+      if (this.$refs.form.validate()) {
+        this.$store
+          .dispatch("posts/addCommnet", {
+            id: Date.now(),
+            postId: this.postId,
+            content: this.content,
+            User: {
+              nickname: this.me.nickname,
+            },
+            createdAt: Date.now(),
+          })
+          .then(() => {
+            this.content = "";
+            this.success = true;
+            this.successMessage = "댓글이 작성됨";
+            this.hideDetails = false;
+          })
+          .catch(() => {});
+      }
+    },
+  },
+};
+</script>
+
+<style></style>

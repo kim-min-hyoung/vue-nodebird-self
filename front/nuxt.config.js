@@ -1,6 +1,6 @@
 module.exports = {
   head: {
-    title: "NodeBird",
+    title: "nodebird",
   },
   buildModules: ["@nuxtjs/vuetify"],
   modules: ["@nuxtjs/axios"],

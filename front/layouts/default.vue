@@ -16,10 +16,10 @@
         </v-toolbar-items>
       </v-app-bar>
       <v-row no>
-        <v-col class="red" cols="12" md="4">
+        <v-col cols="12" md="4">
           <login-form />
         </v-col>
-        <v-col class="yellow" cols="12" md="8">
+        <v-col cols="12" md="8">
           <nuxt />
         </v-col>
       </v-row>

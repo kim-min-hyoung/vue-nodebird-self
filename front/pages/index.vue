@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import PostCard from "~/components/PostCard";
-import PostForm from "~/components/PostForm";
+import PostCard from "../components/PostCard";
+import PostForm from "../components/PostForm";
 
 export default {
   components: { PostForm, PostCard },
