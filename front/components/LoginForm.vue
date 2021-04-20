@@ -56,6 +56,7 @@ export default {
         this.$store.dispatch("users/logIn", {
           email: this.email,
           nickname: "제목없음",
+          password: this.password,
         });
       } else {
         alert("폼이 유효하지 않습니다");

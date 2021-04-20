@@ -4,7 +4,11 @@
       <v-img />
       <v-card-text>
         <div>
-          <h3>{{ post.User.nickname }}</h3>
+          <h3>
+            <nuxt-link :to="'/user/' + post.id">
+              {{ post.User.nickname }}</nuxt-link
+            >
+          </h3>
           <span>{{ post.content }}</span>
         </div>
       </v-card-text>
@@ -47,7 +51,7 @@
 </template>
 
 <script>
-import CommentForm from "../components/CommentForm";
+import CommentForm from "./CommentForm";
 
 export default {
   components: { CommentForm },
@@ -81,4 +85,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+a {
+  color: inherit;
+  text-decoration: none;
+}
+</style>

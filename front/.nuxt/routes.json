@@ -14,6 +14,20 @@
     "_name": "_7aef9cde"
   },
   {
+    "name": "post-id",
+    "path": "/post/:id",
+    "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/post/_id/index.vue",
+    "chunkName": "pages/post/_id/index",
+    "_name": "_3f2e9758"
+  },
+  {
+    "name": "user-id",
+    "path": "/user/:id",
+    "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/user/_id/index.vue",
+    "chunkName": "pages/user/_id/index",
+    "_name": "_1f8ebf82"
+  },
+  {
     "name": "index",
     "path": "/",
     "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/index.vue",

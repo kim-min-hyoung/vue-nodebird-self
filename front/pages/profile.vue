@@ -16,20 +16,36 @@
     </v-card>
     <v-card class="pa-6 ma-3">
       <v-subheader>팔로잉</v-subheader>
-      <follower-list :users="followingList" :remove="removeFollowing" />
+      <follow-list :users="followingList" :remove="removeFollowing" />
+      <v-btn
+        @click="loadMoreFollowings"
+        v-if="hasMoreFollowing"
+        dark
+        color="blue"
+        style="width: 100%"
+        >더보기</v-btn
+      >
     </v-card>
     <v-card class="pa-6 ma-3">
       <v-subheader>팔로워</v-subheader>
-      <follower-list :users="followerList" :remove="removeFollower" />
+      <follow-list :users="followerList" :remove="removeFollower" />
+      <v-btn
+        @click="loadMoreFollowers"
+        v-if="hasMoreFollower"
+        dark
+        color="blue"
+        style="width: 100%"
+        >더보기</v-btn
+      >
     </v-card>
   </v-container>
 </template>
 
 <script>
-import FollowerList from "../components/FollowerList";
+import FollowList from "../components/FollowList";
 
 export default {
-  components: { FollowerList },
+  components: { FollowList },
 
   data() {
     return {
@@ -47,6 +63,16 @@ export default {
     followerList() {
       return this.$store.state.users.followerList;
     },
+    hasMoreFollowing() {
+      return this.$store.state.users.hasMoreFollowing;
+    },
+    hasMoreFollower() {
+      return this.$store.state.users.hasMoreFollower;
+    },
+  },
+  fetch({ store }) {
+    store.dispatch("users/loadFollowings");
+    store.dispatch("users/loadFollowers");
   },
 
   methods: {
@@ -61,6 +87,12 @@ export default {
     },
     removeFollower(id) {
       this.$store.dispatch("users/removeFollower", { id });
+    },
+    loadMoreFollowings() {
+      this.$store.dispatch("users/loadFollowings");
+    },
+    loadMoreFollowers() {
+      this.$store.dispatch("users/loadFollowers");
     },
   },
   layout: "admin",

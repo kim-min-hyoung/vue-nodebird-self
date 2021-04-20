@@ -6,6 +6,8 @@ import scrollBehavior from './router.scrollBehavior.js'
 
 const _c165bf5a = () => interopDefault(import('../pages/profile.vue' /* webpackChunkName: "pages/profile" */))
 const _7aef9cde = () => interopDefault(import('../pages/signup.vue' /* webpackChunkName: "pages/signup" */))
+const _3f2e9758 = () => interopDefault(import('../pages/post/_id/index.vue' /* webpackChunkName: "pages/post/_id/index" */))
+const _1f8ebf82 = () => interopDefault(import('../pages/user/_id/index.vue' /* webpackChunkName: "pages/user/_id/index" */))
 const _2f96ff7c = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
@@ -27,6 +29,14 @@ export const routerOptions = {
     path: "/signup",
     component: _7aef9cde,
     name: "signup"
+  }, {
+    path: "/post/:id",
+    component: _3f2e9758,
+    name: "post-id"
+  }, {
+    path: "/user/:id",
+    component: _1f8ebf82,
+    name: "user-id"
   }, {
     path: "/",
     component: _2f96ff7c,
