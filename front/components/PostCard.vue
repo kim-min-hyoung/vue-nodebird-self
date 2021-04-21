@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-card class="mt-5 mx-5 ">
-      <v-img />
       <v-card-text>
         <div>
           <h3>
@@ -11,6 +10,7 @@
           </h3>
           <span>{{ post.content }}</span>
         </div>
+        <post-images :images="post.Images" />
       </v-card-text>
       <v-card-actions>
         <v-btn text color="orange">
@@ -52,9 +52,10 @@
 
 <script>
 import CommentForm from "./CommentForm";
+import PostImages from "./PostImages";
 
 export default {
-  components: { CommentForm },
+  components: { CommentForm, PostImages },
 
   props: {
     post: {

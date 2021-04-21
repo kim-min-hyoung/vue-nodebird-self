@@ -18,13 +18,13 @@ const upload = multer({
     },
   }),
   limit: {
-    filesize: 20 * 1024 * 1024,
+    fileSize: 20 * 1024 * 1024,
   },
 });
 
 router.post("/images", isLoggedIn, upload.array("image"), (req, res) => {
-  console.log("req.files:", req.files); //[{},{}]
-  return res.json(req.files.map((v) => v.filename));
+  console.log("req.files:", req.files); // req.files = [{}, {}]
+  res.json(req.files.map((v) => v.filename));
 });
 
 router.post("/", isLoggedIn, async (req, res, next) => {
@@ -44,12 +44,27 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       );
       await newPost.addHashtags(result.map((r) => r[0]));
     }
+
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        await Promise.all(
+          req.body.image.map((image) => {
+            return db.Image.create({ src: image, PostId: newPost.id });
+          })
+        );
+      } else {
+        await db.Image.create({ src: req.body.image, PostId: newPost.id });
+      }
+    }
     const fullPost = await db.Post.findOne({
       where: { id: newPost.id },
       include: [
         {
           model: db.User,
           attributes: ["id", "nickname"],
+        },
+        {
+          model: db.Image,
         },
       ],
     });

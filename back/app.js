@@ -12,7 +12,7 @@ const postRouter = require("./routes/post");
 
 const app = express();
 
-db.sequelize.sync();
+db.sequelize.sync({ force: false });
 passportConfig();
 
 app.use(morgan("dev"));
@@ -22,6 +22,7 @@ app.use(
     credentials: true,
   })
 );
+app.use("/", express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookie("cookiesecret"));
