@@ -33,10 +33,12 @@
         </v-menu>
       </v-card-actions>
     </v-card>
+
     <template v-if="commentOpend">
       <comment-form :post-id="post.id" />
       <v-list>
         <v-list-item v-for="c in post.Comments" :key="c.id">
+          <div>{{ c }}</div>
           <v-list-item-avatar color="teal">
             <span>{{ c.User.nickname[0] }}</span>
           </v-list-item-avatar>
@@ -80,6 +82,11 @@ export default {
     onEditPost() {},
 
     onToggleComment() {
+      if (!this.commentOpend) {
+        this.$store.dispatch("posts/loadComments", {
+          postId: this.post.id,
+        });
+      }
       this.commentOpend = !this.commentOpend;
     },
   },

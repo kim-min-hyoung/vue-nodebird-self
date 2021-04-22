@@ -71,8 +71,8 @@ export default {
     },
   },
   fetch({ store }) {
-    store.dispatch("users/loadFollowings");
     store.dispatch("users/loadFollowers");
+    return store.dispatch("users/loadFollowings");
   },
 
   methods: {

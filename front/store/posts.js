@@ -1,3 +1,6 @@
+import Vue from "vue";
+// import throttle from "lodash.throttle";
+
 export const state = () => ({
   mainPosts: [],
   hasMorePost: true,
@@ -11,18 +14,25 @@ export const mutations = {
   },
 
   removePost(state, payload) {
-    const index = state.mainPosts.findIndex((v) => v.id === payload.id);
+    const index = state.mainPosts.findIndex((v) => v.id === payload.postId);
     state.mainPosts.splice(index, 1);
   },
 
-  addCommnet(state, payload) {
+  loadComments(state, payload) {
     const index = state.mainPosts.findIndex((v) => v.id === payload.postId);
+    console.log(payload);
+    Vue.set(state.mainPosts[index], "Comments", payload);
+  },
+
+  addComment(state, payload) {
+    const index = state.mainPosts.findIndex((v) => v.id === payload.PostId);
+    console.log(index);
     state.mainPosts[index].Comments.unshift(payload);
   },
 
   loadPosts(state, payload) {
     state.mainPosts = state.mainPosts.concat(payload);
-    state.hasMorePost = payload.length === limit;
+    state.hasMorePost = payload.length === 10;
   },
 
   concatImagePaths(state, payload) {
@@ -39,7 +49,7 @@ export const actions = {
     //서버에 게시글 등록 요청 보냄
     this.$axios
       .post(
-        "http://localhost:3085/post",
+        "/post",
         {
           content: payload.content,
           image: state.imagePaths,
@@ -49,34 +59,76 @@ export const actions = {
       .then((res) => {
         commit("addMainPost", res.data);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error(err);
+      });
   },
+
   remove({ commit }, payload) {
-    commit("removePost", payload);
+    this.$axios
+      .delete(`/post/${payload.postId}`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        commit("removePost", payload);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
-  addCommnet({ commit }, payload) {
-    commit("addCommnet", payload);
+
+  loadComments({ commit }, payload) {
+    this.$axios
+      .get(`/post/${payload.postId}/comments`)
+      .then((res) => {
+        commit("loadComments", { postId: payload.postId, data: res.data });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
+
+  addComment({ commit }, payload) {
+    this.$axios
+      .post(
+        `/post/${payload.postId}/comment`,
+        { content: payload.content },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        commit("addComment", res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+
   loadPosts({ commit, state }, payload) {
     if (state.hasMorePost) {
       this.$axios
-        .get(
-          `http://localhost:3085/posts?offset=${state.mainPosts.length}&limit=10`
-        )
-        .then(() => {
-          commit("loadPosts");
+        .get(`/posts?offset=${state.mainPosts.length}&limit=10`)
+        .then((res) => {
+          console.log("res.data:", res.data);
+          commit("loadPosts", res.data);
         })
-        .catch(() => {});
+        .catch((err) => {
+          console.error(err);
+        });
     }
   },
+
   uploadImages({ commit }, payload) {
     this.$axios
-      .post("http://localhost:3085/post/images", payload, {
+      .post("/post/images", payload, {
         withCredentials: true,
       })
       .then((res) => {
         commit("concatImagePaths", res.data);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error(err);
+      });
   },
 };

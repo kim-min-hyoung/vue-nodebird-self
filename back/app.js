@@ -9,6 +9,7 @@ const db = require("./models");
 const passportConfig = require("./passport");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
+const postsRouter = require("./routes/posts");
 
 const app = express();
 
@@ -18,13 +19,11 @@ passportConfig();
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:3080",
     credentials: true,
   })
 );
-app.use("/", express.static("uploads"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
 app.use(cookie("cookiesecret"));
 app.use(
   session({
@@ -37,11 +36,16 @@ app.use(
     },
   })
 );
+app.use("/", express.static("uploads"));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/user", userRouter);
 app.use("/post", postRouter);
+app.use("/posts", postsRouter);
 
 app.listen(3085, () => {
   console.log(`벡엔드 서버 ${3085}번 포트에서 작동중`);

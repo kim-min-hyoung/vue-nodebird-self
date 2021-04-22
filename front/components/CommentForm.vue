@@ -24,7 +24,7 @@
 export default {
   props: {
     postId: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
@@ -33,9 +33,9 @@ export default {
     return {
       valid: false,
       content: "",
-      hideDetails: false,
       success: false,
       successMessage: "",
+      hideDetails: true,
     };
   },
 
@@ -56,14 +56,9 @@ export default {
     onSubmitForm() {
       if (this.$refs.form.validate()) {
         this.$store
-          .dispatch("posts/addCommnet", {
-            id: Date.now(),
+          .dispatch("posts/addComment", {
             postId: this.postId,
             content: this.content,
-            User: {
-              nickname: this.me.nickname,
-            },
-            createdAt: Date.now(),
           })
           .then(() => {
             this.content = "";
@@ -71,7 +66,9 @@ export default {
             this.successMessage = "댓글이 작성됨";
             this.hideDetails = false;
           })
-          .catch(() => {});
+          .catch((err) => {
+            console.error(err);
+          });
       }
     },
   },
