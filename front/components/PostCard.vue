@@ -1,23 +1,19 @@
 <template>
   <div>
-    <v-card class="mt-5 mx-5 ">
-      <v-card-text>
-        <div>
-          <h3>
-            <nuxt-link :to="'/user/' + post.id">
-              {{ post.User.nickname }}</nuxt-link
-            >
-          </h3>
-          <span>{{ post.content }}</span>
-        </div>
-        <post-images :images="post.Images" />
-      </v-card-text>
+    <v-card v-if="post.RetweetId && post.Retweet" class="ma-5 pa-3">
+      <v-subheader>{{ post.User.nickname }}님이 리트윗하셨습니다.</v-subheader>
+      <v-card>
+        <post-content :post="post.Retweet" />
+      </v-card>
+    </v-card>
+    <v-card v-else class="ma-5 pa-3">
+      <post-content :post="post" />
       <v-card-actions>
-        <v-btn text color="orange">
+        <v-btn text color="orange" @click="onRetweet">
           <v-icon>mdi-twitter-retweet</v-icon>
         </v-btn>
-        <v-btn text color="orange">
-          <v-icon>mdi-heart-outline</v-icon>
+        <v-btn text color="orange" @click="onClickHeart">
+          <v-icon>{{ heartIcon }}</v-icon>
         </v-btn>
         <v-btn text color="orange" @click="onToggleComment">
           <v-icon>mdi-comment-outline</v-icon>
@@ -38,7 +34,6 @@
       <comment-form :post-id="post.id" />
       <v-list>
         <v-list-item v-for="c in post.Comments" :key="c.id">
-          <div>{{ c }}</div>
           <v-list-item-avatar color="teal">
             <span>{{ c.User.nickname[0] }}</span>
           </v-list-item-avatar>
@@ -54,10 +49,10 @@
 
 <script>
 import CommentForm from "./CommentForm";
-import PostImages from "./PostImages";
+import PostContent from "./PostContent";
 
 export default {
-  components: { CommentForm, PostImages },
+  components: { CommentForm, PostContent },
 
   props: {
     post: {
@@ -72,6 +67,21 @@ export default {
     };
   },
 
+  computed: {
+    me() {
+      return this.$store.state.users.me;
+    },
+
+    liked() {
+      const me = this.$store.state.users.me;
+      return !!(this.post.Likers || []).find((v) => v.id === (me && me.id));
+    },
+
+    heartIcon() {
+      return this.liked ? "mdi-heart" : "mdi-heart-outline";
+    },
+  },
+
   methods: {
     onRemovePost() {
       this.$store.dispatch("posts/remove", {
@@ -82,12 +92,35 @@ export default {
     onEditPost() {},
 
     onToggleComment() {
-      if (!this.commentOpend) {
-        this.$store.dispatch("posts/loadComments", {
+      // if (!this.commentOpend) {
+      //   this.$store.dispatch("posts/loadComments", {
+      //     postId: this.post.id,
+      //   });
+      // }
+      this.commentOpend = !this.commentOpend;
+    },
+
+    onRetweet() {
+      if (!this.me) {
+        return alert("로그인이 필요합니다");
+      }
+      this.$store.dispatch("posts/retweet", {
+        postId: this.post.id,
+      });
+    },
+
+    onClickHeart() {
+      if (!this.me) {
+        return alert("로그인이 필요합니다");
+      }
+      if (this.liked) {
+        return this.$store.dispatch("posts/unlikePost", {
           postId: this.post.id,
         });
       }
-      this.commentOpend = !this.commentOpend;
+      return this.$store.dispatch("posts/likePost", {
+        postId: this.post.id,
+      });
     },
   },
 };

@@ -66,6 +66,14 @@ router.post("/", isLoggedIn, async (req, res, next) => {
         {
           model: db.Image,
         },
+        {
+          model: db.Comment,
+        },
+        {
+          model: db.User,
+          as: "Likers",
+          attributes: ["id"],
+        },
       ],
     });
     return res.json(fullPost);
@@ -75,31 +83,31 @@ router.post("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.get("/:id/comments", async (req, res, next) => {
-  try {
-    const post = await db.Post.findOne({ where: { id: req.params.id } });
-    if (!post) {
-      res.status(404).send("포스트가 존재하지 않습니다");
-    }
-    const comments = await db.Comment.findAll({
-      where: { PostId: req.params.id },
-      include: [
-        {
-          model: db.User,
-          attributes: ["id", "nickname"],
-        },
-      ],
-      order: [
-        ["createdAt", "ASC"],
-        ["updatedAt", "DESC"],
-      ],
-    });
-    return res.json(comments);
-  } catch (err) {
-    console.error(err);
-    return next(err);
-  }
-});
+// router.get("/:id/comments", async (req, res, next) => {
+//   try {
+//     const post = await db.Post.findOne({ where: { id: req.params.id } });
+//     if (!post) {
+//       res.status(404).send("포스트가 존재하지 않습니다");
+//     }
+//     const comments = await db.Comment.findAll({
+//       where: { PostId: req.params.id },
+//       include: [
+//         {
+//           model: db.User,
+//           attributes: ["id", "nickname"],
+//         },
+//       ],
+//       order: [
+//         ["createdAt", "ASC"],
+//         ["updatedAt", "DESC"],
+//       ],
+//     });
+//     return res.json(comments);
+//   } catch (err) {
+//     console.error(err);
+//     return next(err);
+//   }
+// });
 
 router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
   try {
@@ -164,6 +172,11 @@ router.post("/:id/retweet", isLoggedIn, async (req, res, next) => {
         {
           model: db.User,
           attributes: ["id", "nickname"],
+        },
+        {
+          model: db.User,
+          as: "Likers",
+          attributes: ["id"],
         },
         {
           model: db.Post,
