@@ -4,10 +4,9 @@
       <h3>회원가입</h3>
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-text-field
-          v-model="email"
+          v-model="userId"
           label="이메일"
-          type="email"
-          :rules="emailRules"
+          :rules="userIdRules"
           required
         />
         <v-text-field
@@ -48,13 +47,13 @@ export default {
   data() {
     return {
       valid: false,
-      email: "",
+      userId: "",
       password: "",
       nickname: "",
       terms: false,
-      emailRules: [
-        (v) => !!v || "이메일은 필수입니다",
-        (v) => /.+@.+/.test(v) || "이메일이 유효하지 않습니다",
+      userIdRules: [
+        (v) => !!v || "아이디는 필수입니다",
+        (v) => /.+@.+/.test(v) || "아이디가 유효하지 않습니다",
       ],
       passwordRules: [(v) => !!v || "비밀번호는 필수입니다"],
       passwordCheckRules: [
@@ -77,7 +76,7 @@ export default {
         this.$store
           .dispatch("users/signUp", {
             nickname: this.nickname,
-            email: this.email,
+            userId: this.userId,
             password: this.password,
           })
           .then(() => {

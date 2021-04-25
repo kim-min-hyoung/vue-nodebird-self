@@ -3,10 +3,9 @@
     <v-card class="mt-2 pa-4">
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-text-field
-          v-model="email"
-          :rules="emailRules"
-          label="이메일"
-          type="email"
+          v-model="userId"
+          :rules="userIdRules"
+          label="아이디"
           required
         />
         <v-text-field
@@ -25,6 +24,11 @@
     <v-card class="mt-3 ml-2 pa-8">
       {{ me.nickname }}님이 로그인 되었습니다.
       <v-btn @click="onLogOut">로그아웃</v-btn>
+      <v-row>
+        <v-col cols="4">{{ me.Followings.length }}팔로잉수</v-col>
+        <v-col cols="4">{{ me.Followers.length }}팔로워수</v-col>
+        <v-col cols="4">{{ Posts.length }}게시글수</v-col>
+      </v-row>
     </v-card>
   </v-container>
 </template>
@@ -34,10 +38,10 @@ export default {
   data() {
     return {
       valid: false,
-      email: "",
+      userId: "",
       password: "",
-      emailRules: [
-        (v) => !!v || "이메일은 필수입니다",
+      userIdRules: [
+        (v) => !!v || "아이디는 필수입니다",
         (v) => /.+@.+/.test(v) || "이메일이 유효하지 않습니다",
       ],
       passwordRules: [(v) => !!v || "비밀번호는 필수입니다"],
@@ -48,13 +52,16 @@ export default {
     me() {
       return this.$store.state.users.me;
     },
+    Posts() {
+      return this.$store.state.posts.mainPosts;
+    },
   },
 
   methods: {
     onSubmitForm() {
       if (this.$refs.form.validate()) {
         this.$store.dispatch("users/logIn", {
-          email: this.email,
+          userId: this.userId,
           nickname: "제목없음",
           password: this.password,
         });

@@ -6,6 +6,8 @@
           <nuxt-link :to="'/user/' + post.id">
             {{ post.User.nickname }}</nuxt-link
           >
+          <v-btn v-if="canFollow" @click="onFollow">팔로우</v-btn>
+          <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
         </h3>
         <span>{{ post.content }}</span>
       </div>
@@ -23,6 +25,38 @@ export default {
   props: {
     post: {
       type: Object,
+    },
+  },
+  computed: {
+    me() {
+      return this.$store.state.users.me;
+    },
+    canFollow() {
+      return (
+        this.me && //로그인을 해야 하고
+        this.post.User.id !== this.me.id && //내 아이디가 아니어야 하며
+        !this.me.Followings.find((v) => v.id === this.post.User.id) // 기존에 나를 팔로워하고 있지 않아야 버튼이 뜸
+      );
+    },
+    canUnFollow() {
+      return (
+        this.me && //로그인을 해야 하고
+        this.post.User.id !== this.me.id && //내 아이디가 아니어야 하며
+        this.me.Followings.find((v) => v.id === this.post.User.id) // 기존에 나를 팔로워하고 있어야 버튼이 뜸
+      );
+    },
+  },
+
+  methods: {
+    onFollow() {
+      this.$store.dispatch("users/follow", {
+        userId: this.post.UserId,
+      });
+    },
+    onUnFollow() {
+      this.$store.dispatch("users/unfollow", {
+        userId: this.post.UserId,
+      });
     },
   },
 };
