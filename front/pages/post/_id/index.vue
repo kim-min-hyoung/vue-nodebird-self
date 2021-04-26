@@ -17,6 +17,9 @@ export default {
       );
     },
   },
+  fetch({ store, params }) {
+    return store.dispatch("posts/loadPost", params.id);
+  },
 };
 </script>
 

@@ -1,16 +1,24 @@
 <template>
   <div>
+    <div>
+      <h3>
+        <nuxt-link :to="'/user/' + post.User.id">
+          {{ post.User.nickname }}</nuxt-link
+        >
+        <v-btn v-if="canFollow" @click="onFollow">팔로우</v-btn>
+        <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
+      </h3>
+    </div>
     <v-card-text>
-      <div>
-        <h3>
-          <nuxt-link :to="'/user/' + post.id">
-            {{ post.User.nickname }}</nuxt-link
-          >
-          <v-btn v-if="canFollow" @click="onFollow">팔로우</v-btn>
-          <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
-        </h3>
-        <span>{{ post.content }}</span>
-      </div>
+      <template v-for="(node, i) in nodes">
+        <nuxt-link
+          v-if="node.startsWith('#')"
+          :key="i"
+          :to="`/hashtag/${node.slice(1)}`"
+          >{{ node }}</nuxt-link
+        >
+        <template v-else>{{ node }}</template>
+      </template>
       <post-images :images="post.Images" />
     </v-card-text>
   </div>
@@ -28,6 +36,10 @@ export default {
     },
   },
   computed: {
+    nodes() {
+      return this.post.content.split(/(#[^\s#]+)/);
+    },
+
     me() {
       return this.$store.state.users.me;
     },

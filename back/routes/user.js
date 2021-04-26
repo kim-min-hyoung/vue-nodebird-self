@@ -1,14 +1,46 @@
+const Sequelize = require("sequelize");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const db = require("../models");
+
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 const router = express.Router();
+const Op = Sequelize.Op;
 
 router.get("/", isLoggedIn, async (req, res, next) => {
   const user = req.user;
   res.json(user);
+});
+
+router.get("/:id", async (req, res, next) => {
+  try {
+    const user = await db.User.findOne({
+      where: { id: parseInt(req.params.id, 10) },
+      include: [
+        {
+          model: db.Post,
+          attributes: ["id"],
+        },
+        {
+          model: db.User,
+          as: "Followings",
+          attributes: ["id"],
+        },
+        {
+          model: db.User,
+          as: "Followers",
+          attributes: ["id"],
+        },
+      ],
+      attributes: ["id", "nickname"],
+    });
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 });
 
 router.post("/", isNotLoggedIn, async (req, res, next) => {
@@ -116,6 +148,40 @@ router.post("/logout", isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
   return res.status(200).send("로그아웃 되었습니다");
+});
+
+router.get("/:id/posts", async (req, res, next) => {
+  try {
+    let where = {
+      UserId: parseInt(req.params.id, 10),
+      RetweetId: null,
+    };
+    if (parseInt(req.query.lastId, 10)) {
+      where[Op.lt] = parseInt(req.query.lastId, 10);
+    }
+
+    const posts = await db.Post.findAll({
+      where,
+      include: [
+        {
+          model: db.User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: db.Image,
+        },
+        {
+          model: db.User,
+          through: "Like",
+          as: "Likers",
+          attributes: ["id"],
+        },
+      ],
+    });
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 router.post("/:id/follow", isLoggedIn, async (req, res, next) => {

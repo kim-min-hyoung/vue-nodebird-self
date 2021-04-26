@@ -1,13 +1,5 @@
 <template>
   <v-container>
-    <v-card class="mb-4 pa-3">
-      {{ other.nickName }}
-      <v-row>
-        <v-col cols="4">{{ other.Followings.length }} 팔로잉</v-col>
-        <v-col cols="4">{{ other.Followers.length }} 팔로워</v-col>
-        <v-col cols="4">{{ other.Posts.length }} 게시글</v-col>
-      </v-row>
-    </v-card>
     <div>
       <post-card v-for="p in mainPosts" :key="p.id" :post="p"></post-card>
     </div>
@@ -31,15 +23,10 @@ export default {
   },
 
   fetch({ store, params }) {
-    return Promise.all([
-      store.dispatch("posts/loadUserPosts", {
-        userId: params.id,
-        reset: true,
-      }),
-      store.dispatch("users/loadOther", {
-        userId: params.id,
-      }),
-    ]);
+    return store.dispatch("posts/loadHashtagPosts", {
+      hashtag: encodeURIComponent(params.id),
+      reset: true,
+    });
   },
 
   mounted() {

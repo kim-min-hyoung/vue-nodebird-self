@@ -14,6 +14,13 @@
     "_name": "_7aef9cde"
   },
   {
+    "name": "hashtag-id",
+    "path": "/hashtag/:id",
+    "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/hashtag/_id/index.vue",
+    "chunkName": "pages/hashtag/_id/index",
+    "_name": "_1eb8f564"
+  },
+  {
     "name": "post-id",
     "path": "/post/:id",
     "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/post/_id/index.vue",

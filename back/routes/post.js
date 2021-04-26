@@ -232,4 +232,55 @@ router.delete("/:id/like", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.get("/:id", async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({
+      where: { id: req.params.id },
+      include: [
+        {
+          model: db.User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: db.Image,
+        },
+        {
+          model: db.User,
+          as: "Likers",
+          attributes: ["id"],
+        },
+        {
+          model: db.Post,
+          as: "Retweet",
+          include: [
+            {
+              model: db.User,
+              attributes: ["id", "nickname"],
+            },
+            { model: db.Image },
+          ],
+        },
+      ],
+    });
+    res.json(post);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+router.delete("/:id", async (req, res, next) => {
+  try {
+    await db.Post.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.send("삭제했습니다.");
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
 module.exports = router;

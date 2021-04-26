@@ -34,7 +34,7 @@ export default {
   },
 
   fetch({ store }) {
-    return store.dispatch("posts/loadPosts");
+    return store.dispatch("posts/loadPosts", { reset: true });
   },
 
   mounted() {
@@ -46,7 +46,7 @@ export default {
 
   methods: {
     onScroll() {
-      console.log("scroll");
+      console.log(this.hasMorePost);
       if (
         window.scrollY + document.documentElement.clientHeight >
         document.documentElement.scrollHeight - 300

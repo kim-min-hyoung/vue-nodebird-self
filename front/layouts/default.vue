@@ -7,10 +7,14 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-text-field
-            :style="{ marginTop: '8px' }"
-            prepend-icon="mdi-magnify"
-          />
+          <v-form @submit.prevent="onSearchHashtag">
+            <v-text-field
+              class="mt-2"
+              prepend-icon="mdi-magnify"
+              v-model="hashtag"
+              hide-details
+            />
+          </v-form>
           <v-btn text nuxt to="/profile"><div>프로필</div></v-btn>
           <v-btn text nuxt to="/signup"> <div>회원가입</div></v-btn>
         </v-toolbar-items>
@@ -31,6 +35,21 @@
 import LoginForm from "../components/LoginForm.vue";
 export default {
   components: { LoginForm },
+
+  data() {
+    return {
+      hashtag: "",
+    };
+  },
+
+  methods: {
+    onSearchHashtag() {
+      this.$router.push({
+        path: `/hashtag/${encodeURIComponent(this.hashtag)}`,
+      });
+      this.hashtag = "";
+    },
+  },
 };
 </script>
 

@@ -4,11 +4,15 @@ export const state = () => ({
   followingList: [],
   hasMoreFollower: true,
   hasMoreFollowing: true,
+  other: null, //남의 정보
 });
 
 export const mutations = {
   setMe(state, payload) {
     state.me = payload;
+  },
+  setOther(state, payload) {
+    state.other = payload;
   },
   changeNickname(state, payload) {
     state.me.nickname = payload.nickname;
@@ -61,22 +65,21 @@ export const actions = {
       const res = await this.$axios.get("/user", {
         withCredentials: true,
       });
-      console.log(res.data);
       commit("setMe", res.data);
     } catch (err) {
       console.error(err);
     }
+  },
 
-    this.$axios
-      .get("/user", {
+  async loadOther({ commit }, payload) {
+    try {
+      const res = await this.$axios.get(`/user/${payload.userId}`, {
         withCredentials: true,
-      })
-      .then((res) => {
-        commit("setMe", res.data);
-      })
-      .catch((err) => {
-        console.error(err);
       });
+      commit("setOther", res.data);
+    } catch (err) {
+      console.error(err);
+    }
   },
 
   signUp({ commit }, payload) {

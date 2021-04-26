@@ -25,9 +25,18 @@
       {{ me.nickname }}님이 로그인 되었습니다.
       <v-btn @click="onLogOut">로그아웃</v-btn>
       <v-row>
-        <v-col cols="4">{{ me.Followings.length }}팔로잉수</v-col>
-        <v-col cols="4">{{ me.Followers.length }}팔로워수</v-col>
-        <v-col cols="4">{{ Posts.length }}게시글수</v-col>
+        <v-col cols="4"
+          >{{ me.Followings.length }}
+          <div>following</div></v-col
+        >
+        <v-col cols="4"
+          >{{ me.Followers.length }}
+          <div>follower</div></v-col
+        >
+        <v-col cols="4"
+          >{{ Posts.length }}
+          <div>postings</div></v-col
+        >
       </v-row>
     </v-card>
   </v-container>
