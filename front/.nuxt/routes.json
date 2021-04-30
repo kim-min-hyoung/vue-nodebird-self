@@ -3,42 +3,36 @@
     "name": "profile",
     "path": "/profile",
     "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/profile.vue",
-    "chunkName": "pages/profile",
-    "_name": "_c165bf5a"
+    "chunkName": "pages/profile"
   },
   {
     "name": "signup",
     "path": "/signup",
     "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/signup.vue",
-    "chunkName": "pages/signup",
-    "_name": "_7aef9cde"
+    "chunkName": "pages/signup"
   },
   {
     "name": "hashtag-id",
     "path": "/hashtag/:id",
     "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/hashtag/_id/index.vue",
-    "chunkName": "pages/hashtag/_id/index",
-    "_name": "_1eb8f564"
+    "chunkName": "pages/hashtag/_id/index"
   },
   {
     "name": "post-id",
     "path": "/post/:id",
     "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/post/_id/index.vue",
-    "chunkName": "pages/post/_id/index",
-    "_name": "_3f2e9758"
+    "chunkName": "pages/post/_id/index"
   },
   {
     "name": "user-id",
     "path": "/user/:id",
     "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/user/_id/index.vue",
-    "chunkName": "pages/user/_id/index",
-    "_name": "_1f8ebf82"
+    "chunkName": "pages/user/_id/index"
   },
   {
     "name": "index",
     "path": "/",
     "component": "/Users/minhyoung/Desktop/coding/vue-nodebird-self/front/pages/index.vue",
-    "chunkName": "pages/index",
-    "_name": "_2f96ff7c"
+    "chunkName": "pages/index"
   }
 ]
